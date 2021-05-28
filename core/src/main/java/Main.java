@@ -28,8 +28,9 @@ public class Main {
             String jsonResponse = RequestHandler.handleRequest(requestLine);
 
             var outputToClient = new PrintWriter(client.getOutputStream());
-            sendResponse(outputToClient, jsonResponse);
-
+            if (jsonResponse != null && !jsonResponse.isEmpty()) {
+                sendResponse(outputToClient, jsonResponse);
+            }
             inputFromClient.close();
             outputToClient.close();
             client.close();
@@ -40,8 +41,8 @@ public class Main {
     }
 
     //TODO: ADD RESPONSES!!
-    private static void sendResponse(PrintWriter outputToClient, String response) {
-        outputToClient.print("HTTP/1.1 200 OK\r\nContent-length: " + response.length() + "\r\n\r\n" + response);
+    private static void sendResponse(PrintWriter outputToClient, String jsonResponse) {
+        outputToClient.print("HTTP/1.1 200 OK\r\nContent-length: " + jsonResponse.length() + "\r\n\r\n" + jsonResponse);
         outputToClient.flush();
     }
 

@@ -2,6 +2,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dao.PostFunctions;
 
+import static java.lang.Integer.parseInt;
+
 public class RequestHandler {
 
     public static String handleRequest(String requestLine) {
@@ -45,11 +47,15 @@ public class RequestHandler {
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
             }
-           //TODO: RETURN ALL AS JSON
         }
-        else {
-            //TODO: INCLUDE ID AS PARAMETER IN URL TO FIND FROM DB!
-            //TODO: RETURN ONE AS JSON
+        else if (request.getUrl().contains("id=")) {
+            Integer targetId = parseInt(request.getUrl().split("id=")[1]);
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                return objectMapper.writeValueAsString(PostFunctions.getPost(targetId));
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
         }
         return null;
     }
