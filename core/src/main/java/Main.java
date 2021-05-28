@@ -1,3 +1,5 @@
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.*;
 import java.net.*;
 import java.util.concurrent.*;
@@ -23,10 +25,10 @@ public class Main {
             var inputFromClient = new BufferedReader(new InputStreamReader((client.getInputStream())));
             String requestLine = readRequest(inputFromClient);
 
-            RequestHandler.handleRequest(requestLine);
+            String jsonResponse = RequestHandler.handleRequest(requestLine);
 
             var outputToClient = new PrintWriter(client.getOutputStream());
-            sendResponse(outputToClient);
+            sendResponse(outputToClient, jsonResponse);
 
             inputFromClient.close();
             outputToClient.close();
@@ -37,19 +39,20 @@ public class Main {
         }
     }
 
-    private static void sendResponse(PrintWriter outputToClient) {
-        outputToClient.print("HTTP/1.1 404 Not Found\r\nContent-length: 0\r\n\r\n");
+    //TODO: ADD RESPONSES!!
+    private static void sendResponse(PrintWriter outputToClient, String response) {
+        outputToClient.print(response);
         outputToClient.flush();
     }
 
     private static String readRequest(BufferedReader inputFromClient) throws IOException {
-        var request = inputFromClient.readLine();
+        String requestLine = inputFromClient.readLine();
         while (true) {
             var line = inputFromClient.readLine();
             if (line == null || line.isEmpty()) {
                 break;
             }
         }
-        return request;
+        return requestLine;
     }
 }

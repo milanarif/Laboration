@@ -1,3 +1,4 @@
+
 public class Request {
 
     private RequestType requestType;
@@ -15,4 +16,5 @@ public class Request {
     public String getUrl() {
         return this.url;
     }
+
 }

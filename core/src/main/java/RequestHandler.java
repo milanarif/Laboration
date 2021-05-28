@@ -1,15 +1,15 @@
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dao.PostFunctions;
-import entity.Post;
-
-import java.net.URL;
-import java.util.List;
 
 public class RequestHandler {
-    public static void handleRequest(String requestLine) {
-        Request request = requestFormer(requestLine);
+
+    public static String handleRequest(String requestLine) {
+
+        Request request = requestBuilder(requestLine);
 
         if (request.getRequestType() == RequestType.GET) {
-            getHandler(request);
+            return getHandler(request);
         }
         else if (request.getRequestType() == RequestType.POST) {
             postHandler(request);
@@ -17,34 +17,40 @@ public class RequestHandler {
         else {
             headHandler(request);
         }
+        return null;
     }
 
-    private static void headHandler(Request request) {
-        System.out.println("HEADER REQUEST");
-    }
-
-    private static void postHandler(Request request) {
-        System.out.println("POST REQUEST");
-        System.out.println("REQUESTTYPE: " + request.getRequestType());
-        System.out.println("URL: " + request.getUrl());
-        if (request.getUrl().equals("/post")) {
-            System.out.println("INSIDE");
-            PostFunctions.addPost(new Post("A", "B", "C"));
-        }
-    }
-
-    private static void getHandler(Request request) {
-        System.out.println("GET REQUEST!");
-        List<Post> posts = PostFunctions.getAllPosts();
-        for (Post p : posts) {
-            System.out.println(p.getSubject() + p.getAuthor() + p.getText());
-        }
-    }
-
-    private static Request requestFormer(String requestLine) {
+    private static Request requestBuilder(String requestLine) {
         RequestType requestType = RequestType.valueOf(requestLine.split(" ")[0]);
         String url = requestLine.split(" ")[1];
 
         return new Request(requestType, url);
+    }
+
+    private static void headHandler(Request request) {
+        System.out.println("HEADER REQUEST");
+        //TODO: CHECK IF OK!? EXISTS!?
+    }
+
+    private static void postHandler(Request request) {
+        //TODO: ADD POST CAPABILITY!
+    }
+
+    private static String getHandler(Request request) {
+        System.out.println("GET REQUEST!");
+        if (request.getUrl().equals("/getAll")) {
+            ObjectMapper objectMapper = new ObjectMapper();
+            try {
+                return objectMapper.writeValueAsString(PostFunctions.getAllPosts());
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+           //TODO: RETURN ALL AS JSON
+        }
+        else {
+            //TODO: INCLUDE ID AS PARAMETER IN URL TO FIND FROM DB!
+            //TODO: RETURN ONE AS JSON
+        }
+        return null;
     }
 }
