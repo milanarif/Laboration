@@ -41,7 +41,7 @@ public class Main {
 
     //TODO: ADD RESPONSES!!
     private static void sendResponse(PrintWriter outputToClient, String response) {
-        outputToClient.print(response);
+        outputToClient.print("HTTP/1.1 200 OK\r\nContent-length: " + response.length() + "\r\n\r\n" + response);
         outputToClient.flush();
     }
 
