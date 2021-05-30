@@ -49,29 +49,17 @@ public class ConnectionHandler {
         StringBuilder builder = new StringBuilder();
         String line;
         boolean body = false;
-        do
-        {
-            if (!input.ready()) break;
+        while (input.ready()) {
             line = input.readLine();
-            if (line.contains("Content-Length:") && Integer.parseInt(line.replaceAll("[^0-9]", "")) > 0) {
-                body = true;
-            }
-            if (line.equals("") && !body) {
-                System.out.println("SHOULD BREAK!!");
-                break;
-            }
             if (!builder.isEmpty()) {
                 builder.append("\n");
             }
-            builder.append(line);
-            System.out.println(line);
             if (line.equals("")) {
-                body = false;
+                builder.append("---body---");
             }
+            else builder.append(line);
         }
-        while (true);
 
-        System.out.println(builder);
         return builder.toString();
     }
 
@@ -89,10 +77,7 @@ public class ConnectionHandler {
     }
 
     private static String getBody(String requestString) {
-        if (requestString.contains("BODY_NEXT:")) {
-            return requestString.substring(requestString.indexOf("BODY_NEXT:"), requestString.length()-1);
-        }
-        else return null;
+        return requestString.substring(requestString.indexOf("---body---") + 11);
     }
 
     private static String getUrl(String requestString) {

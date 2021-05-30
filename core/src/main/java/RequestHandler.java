@@ -44,10 +44,10 @@ public class RequestHandler {
 
     //TODO
     private static String post(Request request) {
-        System.out.println("IN POST HANDLING");
         String body = request.getBody();
         try {
             Post post = new ObjectMapper().readValue(body, Post.class);
+            System.out.println(post.toString());
             PostFunctions.addPost(post);
         } catch (JsonProcessingException j) {
             j.printStackTrace();
