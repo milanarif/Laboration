@@ -8,7 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="core" />
         <module name="client" />
-        <module name="persistenceHandler" />
+        <module name="persistance" />
       </profile>
     </annotationProcessing>
   </component>

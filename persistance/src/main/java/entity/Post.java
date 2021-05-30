@@ -59,4 +59,13 @@ public class Post implements Serializable {
     public void setText(String text) {
         this.text = text;
     }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "subject='" + subject + '\'' +
+                ", author='" + author + '\'' +
+                ", text='" + text + '\'' +
+                '}';
+    }
 }

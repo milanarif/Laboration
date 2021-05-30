@@ -12,48 +12,10 @@ public class Main {
         try (ServerSocket serverSocket = new ServerSocket(80)) {
             while (true) {
                 Socket client = serverSocket.accept();
-                System.out.println("Connection from : " + client.getInetAddress());
-                executorService.submit(() -> handleConnection(client));
+                executorService.submit(() -> ConnectionHandler.handleConnection(client));
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private static void handleConnection(Socket client) {
-        try {
-            var inputFromClient = new BufferedReader(new InputStreamReader((client.getInputStream())));
-            String requestLine = readRequest(inputFromClient);
-
-            String response = RequestHandler.handleRequest(requestLine);
-
-            var outputToClient = new PrintWriter(client.getOutputStream());
-            if (response != null) {
-                sendResponse(outputToClient, response);
-            }
-            inputFromClient.close();
-            outputToClient.close();
-            client.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    //TODO: ADD RESPONSES!!
-    private static void sendResponse(PrintWriter outputToClient, String jsonResponse) {
-        outputToClient.print("HTTP/1.1 200 OK\r\nContent-length: " + jsonResponse.length() + "\r\n\r\n" + jsonResponse);
-        outputToClient.flush();
-    }
-
-    private static String readRequest(BufferedReader inputFromClient) throws IOException {
-        String requestLine = inputFromClient.readLine();
-        while (true) {
-            var line = inputFromClient.readLine();
-            if (line == null || line.isEmpty()) {
-                break;
-            }
-        }
-        return requestLine;
     }
 }

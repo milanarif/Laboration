@@ -1,45 +1,22 @@
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dao.PostFunctions;
+import entity.Post;
 
 import static java.lang.Integer.parseInt;
 
 public class RequestHandler {
 
-    public static String handleRequest(String requestLine) {
+    public static String handleRequest(Request request) {
 
-        Request request = requestBuilder(requestLine);
-
-        if (request.getRequestType() == RequestType.GET) {
-            return getHandler(request);
-        }
-        else if (request.getRequestType() == RequestType.POST) {
-            postHandler(request);
-        }
-        else {
-            return headHandler(request);
-        }
-        return null;
+        return switch (request.getRequestType()) {
+            case GET -> getRespond(request);
+            case POST -> post(request);
+            case HEAD -> headRespond(request);
+        };
     }
 
-    private static Request requestBuilder(String requestLine) {
-        RequestType requestType = RequestType.valueOf(requestLine.split(" ")[0]);
-        String url = requestLine.split(" ")[1];
-
-        return new Request(requestType, url);
-    }
-
-    private static String headHandler(Request request) {
-        System.out.println("HEADER REQUEST");
-        return "";
-    }
-
-    private static void postHandler(Request request) {
-        //TODO: ADD POST CAPABILITY!
-    }
-
-    private static String getHandler(Request request) {
-        System.out.println("GET REQUEST!");
+    private static String getRespond(Request request) {
         if (request.getUrl().equals("/getAll")) {
             ObjectMapper objectMapper = new ObjectMapper();
             try {
@@ -58,5 +35,23 @@ public class RequestHandler {
             }
         }
         return null;
+    }
+
+    //TODO
+    private static String headRespond(Request request) {
+        return null;
+    }
+
+    //TODO
+    private static String post(Request request) {
+        System.out.println("IN POST HANDLING");
+        String body = request.getBody();
+        try {
+            Post post = new ObjectMapper().readValue(body, Post.class);
+            PostFunctions.addPost(post);
+        } catch (JsonProcessingException j) {
+            j.printStackTrace();
+        }
+        return "";
     }
 }
