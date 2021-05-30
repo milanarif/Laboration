@@ -17,7 +17,7 @@ public class RequestHandler {
             postHandler(request);
         }
         else {
-            headHandler(request);
+            return headHandler(request);
         }
         return null;
     }
@@ -29,9 +29,9 @@ public class RequestHandler {
         return new Request(requestType, url);
     }
 
-    private static void headHandler(Request request) {
+    private static String headHandler(Request request) {
         System.out.println("HEADER REQUEST");
-        //TODO: CHECK IF OK!? EXISTS!?
+        return "";
     }
 
     private static void postHandler(Request request) {

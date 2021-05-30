@@ -25,11 +25,11 @@ public class Main {
             var inputFromClient = new BufferedReader(new InputStreamReader((client.getInputStream())));
             String requestLine = readRequest(inputFromClient);
 
-            String jsonResponse = RequestHandler.handleRequest(requestLine);
+            String response = RequestHandler.handleRequest(requestLine);
 
             var outputToClient = new PrintWriter(client.getOutputStream());
-            if (jsonResponse != null && !jsonResponse.isEmpty()) {
-                sendResponse(outputToClient, jsonResponse);
+            if (response != null) {
+                sendResponse(outputToClient, response);
             }
             inputFromClient.close();
             outputToClient.close();
