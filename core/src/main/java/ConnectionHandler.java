@@ -14,10 +14,8 @@ public class ConnectionHandler {
 
             //Build request
             Request request = requestBuilder(inputFromClient);
-
             //Create response
             String response = RequestHandler.handleRequest(request);
-
 
             //Give response
             var outputToClient = new PrintWriter(client.getOutputStream());
@@ -48,7 +46,6 @@ public class ConnectionHandler {
     private static String requestToString(BufferedReader input) throws IOException {
         StringBuilder builder = new StringBuilder();
         String line;
-        boolean body = false;
         while (input.ready()) {
             line = input.readLine();
             if (!builder.isEmpty()) {
@@ -59,7 +56,6 @@ public class ConnectionHandler {
             }
             else builder.append(line);
         }
-
         return builder.toString();
     }
 
@@ -77,7 +73,10 @@ public class ConnectionHandler {
     }
 
     private static String getBody(String requestString) {
-        return requestString.substring(requestString.indexOf("---body---") + 11);
+        if (!requestString.contains("Content-Length:")) {
+            return null;
+        }
+        else return requestString.substring(requestString.indexOf("---body---") + 11, requestString.length());
     }
 
     private static String getUrl(String requestString) {
@@ -89,18 +88,3 @@ public class ConnectionHandler {
         outputToClient.flush();
     }
 }
-
-
-/*
-if (body) {
-        do {
-        line = input.readLine();
-        System.out.println(line);
-        if (line.equals("")) break;
-        builder.append("\n");
-        builder.append(line);
-        System.out.println(line);
-        } while (true);
-        System.out.println("OUT");
-        }
- */

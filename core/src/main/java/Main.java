@@ -1,4 +1,3 @@
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.*;
 import java.net.*;
@@ -12,6 +11,7 @@ public class Main {
         try (ServerSocket serverSocket = new ServerSocket(80)) {
             while (true) {
                 Socket client = serverSocket.accept();
+                System.out.println(client.getInetAddress());
                 executorService.submit(() -> ConnectionHandler.handleConnection(client));
             }
         } catch (IOException e) {

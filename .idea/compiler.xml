@@ -8,8 +8,12 @@
         <outputRelativeToContentRoot value="true" />
         <module name="core" />
         <module name="client" />
+        <module name="persistence" />
         <module name="persistance" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="persistenceHandler" target="16" />
+    </bytecodeTargetLevel>
   </component>
 </project>
