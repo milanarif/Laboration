@@ -9,10 +9,10 @@
         <module name="core" />
         <module name="client" />
         <module name="persistence" />
-        <module name="persistance" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="persistance" target="16" />
       <module name="persistenceHandler" target="16" />
     </bytecodeTargetLevel>
   </component>

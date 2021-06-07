@@ -1,9 +1,7 @@
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import dao.PostFunctions;
 import entity.Post;
-
-import static java.lang.Integer.parseInt;
+import com.google.gson.Gson;
+import java.util.List;
 
 public class RequestHandler {
 
@@ -18,23 +16,15 @@ public class RequestHandler {
 
     private static String getRespond(Request request) {
         if (request.getUrl().equals("/getAll")) {
-            ObjectMapper objectMapper = new ObjectMapper();
-            try {
-                return objectMapper.writeValueAsString(PostFunctions.getAllPosts());
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
+            List<Post> posts = PostFunctions.getAllPosts();
+
+            Gson gson = new Gson();
+            String json = gson.toJson(posts);
+
+            return json;
+        } else {
+            return null;
         }
-        else if (request.getUrl().contains("id=")) {
-            Integer targetId = parseInt(request.getUrl().split("id=")[1]);
-            ObjectMapper objectMapper = new ObjectMapper();
-            try {
-                return objectMapper.writeValueAsString(PostFunctions.getPost(targetId));
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
     }
 
     //TODO
@@ -44,13 +34,12 @@ public class RequestHandler {
 
     //TODO
     private static String post(Request request) {
-        String body = request.getBody();
-        try {
-            Post post = new ObjectMapper().readValue(body, Post.class);
-            PostFunctions.addPost(post);
-        } catch (JsonProcessingException j) {
-            j.printStackTrace();
-        }
-        return "";
+        Gson gson = new Gson();
+
+        Post post = gson.fromJson(request.getBody(), Post.class);
+
+        PostFunctions.addPost(post);
+
+        return "123";
     }
 }
