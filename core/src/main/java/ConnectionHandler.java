@@ -23,7 +23,7 @@ public class ConnectionHandler {
             var outputToClient = client.getOutputStream();
 
             if (response != null) {
-                ResponseSender.sendResponse(outputToClient, response);
+                ResponseSender.sendResponse(outputToClient, response, request.getRequestType());
             }
 
             //Close thread
