@@ -15,12 +15,14 @@ public class ConnectionHandler {
 
             //Build request
             Request request = RequestBuilder.buildRequest(inputFromClient);
+            System.out.println("Request Built!");
 
             //Create response
             String response = RequestHandler.handleRequest(request);
+            System.out.println("Response Created!");
 
             //Give response
-            var outputToClient = new PrintWriter(client.getOutputStream());
+            var outputToClient = client.getOutputStream();
 
             if (response != null) {
                 ResponseSender.sendResponse(outputToClient, response);

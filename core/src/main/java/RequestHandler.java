@@ -6,7 +6,7 @@ import java.util.List;
 public class RequestHandler {
 
     public static String handleRequest(Request request) {
-
+        System.out.println(request.toString());
         return switch (request.getRequestType()) {
             case GET -> getRespond(request);
             case POST -> post(request);
@@ -19,9 +19,9 @@ public class RequestHandler {
             List<Post> posts = PostFunctions.getAllPosts();
 
             Gson gson = new Gson();
-            String json = gson.toJson(posts);
 
-            return json;
+            return gson.toJson(posts);
+
         } else {
             return null;
         }
@@ -38,8 +38,10 @@ public class RequestHandler {
 
         Post post = gson.fromJson(request.getBody(), Post.class);
 
+        System.out.println(post.toString());
         PostFunctions.addPost(post);
+        System.out.println("added");
 
-        return "123";
+        return null;
     }
 }

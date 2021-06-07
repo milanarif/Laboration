@@ -1,19 +1,25 @@
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.StringWriter;
+import java.nio.charset.StandardCharsets;
 
 public class RequestBuilder {
 
     private static RequestType type;
     private static String url;
-    private static String body;
 
     public static Request buildRequest(BufferedReader input) throws IOException {
+        //TODO: Unnecessary for all non-posts...
         StringBuilder builder = new StringBuilder();
         String line;
         boolean insideBody = false;
         boolean initialLoop = true;
-        while (input.ready()) {
+        int byteSize = 0;
+        boolean finished = false;
+
+        while (true) {
             line = input.readLine();
+            System.out.println(line);
 
             if (initialLoop) {
                 initialLoop = false;
@@ -24,15 +30,30 @@ public class RequestBuilder {
                     break;
                 }
             }
-
-            if (insideBody) {
-                builder.append(line).append("\n");
+            else if (line.toUpperCase().startsWith("CONTENT-LENGTH")) {
+                line = line.replaceAll("[^\\d.]", "");
+                byteSize = Integer.parseInt(line);
+                System.out.println(byteSize);
             }
-            if (line.trim().isEmpty()) {
-                insideBody = true;
+            else if (line.trim().isEmpty() && byteSize > 0) {
+                while (byteSize > 0) {
+                    line = input.readLine();
+                    System.out.println(line);
+                    byteSize -= line.getBytes(StandardCharsets.UTF_8).length + 2;
+                    System.out.println(byteSize);
+                    builder.append(line);
+                    if (byteSize == 0) {
+                        finished = true;
+                        break;
+                    }
+                }
+            }
+            if (finished) {
+                break;
             }
         }
-        body = builder.toString();
+        String body = builder.toString();
+        System.out.println(body);
         return new Request(type, url, body);
     }
 
@@ -46,12 +67,5 @@ public class RequestBuilder {
             default -> throw new IllegalStateException("Unsupported Request Type: " + type);
         };
         return requestType;
-    }
-
-    private static String getBody(String requestString) {
-        if (!requestString.contains("Content-Length:")) {
-            return null;
-        }
-        else return requestString.substring(requestString.indexOf("---body---") + 11, requestString.length());
     }
 }
