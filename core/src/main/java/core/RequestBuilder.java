@@ -1,6 +1,7 @@
+package core;
+
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 
 public class RequestBuilder {
@@ -58,7 +59,7 @@ public class RequestBuilder {
             case "GET" -> RequestType.GET;
             case "POST" -> RequestType.POST;
             case "HEAD" -> RequestType.HEAD;
-            default -> throw new IllegalStateException("Unsupported Request Type: " + type);
+            default -> throw new IllegalStateException("Unsupported core.Request Type: " + type);
         };
         return requestType;
     }

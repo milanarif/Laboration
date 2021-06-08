@@ -1,21 +1,26 @@
 package dao;
 
 import entity.Post;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.Persistence;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 import java.util.List;
 
 public class PostDao {
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("PU");
 
     public List<Post> getAllPosts() {
+        System.out.println("GETTING ALL POSTS!");
         EntityManager em = emf.createEntityManager();
-        List<Post> posts = em
-                .createQuery("Select p from Post p", Post.class)
+        System.out.println("EM CREATED");
+        List posts = em
+                .createNativeQuery("Select p from Post p", Post.class)
                 .getResultList();
+        System.out.println("PRE-CLOSE");
         em.close();
+
+        System.out.println("Got the posts");
 
         return posts;
     }
@@ -30,11 +35,13 @@ public class PostDao {
     }
 
     public void addPost(Post post) {
+        System.out.println("Adding post");
         EntityManager em = emf.createEntityManager();
         em.getTransaction().begin();
         em.persist(post);
         em.getTransaction().commit();
         em.close();
+        System.out.println("Added post!");
     }
 
     public void changeText(Integer id, String text) {

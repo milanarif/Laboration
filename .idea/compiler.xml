@@ -9,11 +9,15 @@
         <module name="core" />
         <module name="client" />
         <module name="persistence" />
+        <module name="weatherstack2" />
+        <module name="weatherstack" />
+        <module name="spi" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="persistance" target="16" />
       <module name="persistenceHandler" target="16" />
+      <module name="weatherstack2" target="16" />
     </bytecodeTargetLevel>
   </component>
 </project>

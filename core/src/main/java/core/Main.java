@@ -1,11 +1,17 @@
+package core;
+
+import spi.WeatherData;
 
 import java.io.*;
 import java.net.*;
+import java.util.ServiceLoader;
 import java.util.concurrent.*;
 
 public class Main {
     public static void main(String[] args) {
         System.out.println("Started Server...");
+
+        ServiceLoader<WeatherData> weatherData = ServiceLoader.load(WeatherData.class);
 
         ExecutorService executorService = Executors.newCachedThreadPool();
         int port = 80;

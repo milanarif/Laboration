@@ -1,6 +1,9 @@
+package core;
+
 import dao.PostFunctions;
 import entity.Post;
 import com.google.gson.Gson;
+
 import java.util.List;
 
 public class RequestHandler {

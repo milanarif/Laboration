@@ -1,3 +1,4 @@
+package core;
 
 public class Request {
 
@@ -31,7 +32,7 @@ public class Request {
 
     @Override
     public String toString() {
-        return "Request{" +
+        return "core.Request{" +
                 "requestType=" + requestType +
                 ", url='" + url + '\'' +
                 '}';
